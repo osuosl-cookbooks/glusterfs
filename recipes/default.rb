@@ -16,3 +16,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+g = node['glusterfs']
+
+yum_repository 'glusterfs-epel' do
+  repositoryid 'glusterfs-epel'
+  description "GlusterFS upstream $basearch #{g['version']} repo"
+  url "http://download.gluster.org/pub/gluster/glusterfs/#{g['version']}/#{g['minor_version']}/EPEL.repo/epel-$releasever/$basearch/"
+  gpgkey "http://download.gluster.org/pub/gluster/glusterfs/LATEST/EPEL.repo/pub.key"
+  action :create
+end
+
+yum_repository 'glusterfs-noarch-epel' do
+  repositoryid 'glusterfs-noarch-epel'
+  description "GlusterFS upstream noarch #{g['version']} repo"
+  url "http://download.gluster.org/pub/gluster/glusterfs/#{g['version']}/#{g['minor_version']}/EPEL.repo/epel-$releasever/noarch"
+  gpgkey "http://download.gluster.org/pub/gluster/glusterfs/LATEST/EPEL.repo/pub.key"
+  action :create
+end
+
+%w[ glusterfs glusterfs-fuse ].each do |p|
+  package p do
+    action :install
+  end
+end
