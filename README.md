@@ -1,5 +1,7 @@
 # glusterfs-cookbook
 
+![Travis Button](https://travis-ci.org/osuosl-cookbooks/glusterfs.svg)
+
 TODO: Enter the cookbook description here.
 
 ## Supported Platforms
