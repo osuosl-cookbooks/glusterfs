@@ -19,13 +19,40 @@
 
 g = node['glusterfs']
 base_url = 'http://download.gluster.org/pub/gluster/glusterfs' \
-           "/#{g['version']}/#{g['minor_version']}/EPEL.repo/" \
-           'epel-$releasever/$basearch/'
+           "/#{g['version']}/EPEL.repo/epel-$releasever"
+
+# Gluster packages to remove if you need an older version
+gluster_remove_pkgs = %w(
+  glusterfs
+  glusterfs-api
+  glusterfs-api-devel
+  glusterfs-cli
+  glusterfs-debuginfo
+  glusterfs-devel
+  glusterfs-extra-xlators
+  glusterfs-fuse
+  glusterfs-geo-replication
+  glusterfs-libs
+  glusterfs-rdma
+  glusterfs-regression-tests
+  glusterfs-server
+)
+
+# Exclude glusterfs from distro repo
+%w(base updates extras centosplus contrib).each do |repo|
+  excludes = 'glusterfs* ' + node['yum'][repo]['exclude'].to_s
+  node.override['yum'][repo]['exclude'] = excludes
+end
+
+case node['platform_family']
+when 'rhel'
+  include_recipe 'yum-centos' unless node['platform'] == 'redhat'
+end
 
 yum_repository 'glusterfs-epel' do
   repositoryid 'glusterfs-epel'
   description "GlusterFS upstream $basearch #{g['version']} repo"
-  url base_url
+  url "#{base_url}/$basearch"
   gpgkey 'http://download.gluster.org/pub/gluster/glusterfs/LATEST/EPEL.repo/pub.key'
   action :create
 end
@@ -38,6 +65,19 @@ yum_repository 'glusterfs-noarch-epel' do
   action :create
 end
 
+# If the version is specified, make sure we install that version and not
+# something newer.
+unless g['version'] == 'LATEST'
+  gluster_pkgs.each do |p|
+    # XXX: this is a minor hack. We need a way to bump the version by one point
+    # to do this correctly.
+    package "#{p} >= #{g['version']}.9999" do
+      action :remove
+    end
+  end
+end
+
+# Install client libs
 %w( glusterfs glusterfs-fuse ).each do |p|
   package p do
     action :install
