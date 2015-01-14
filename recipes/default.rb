@@ -80,7 +80,5 @@ end
 
 # Install client libs
 %w( glusterfs glusterfs-fuse ).each do |p|
-  package p do
-    action :install
-  end
+  package p
 end
