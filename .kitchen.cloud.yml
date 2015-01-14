@@ -30,4 +30,3 @@ suites:
     attributes:
       glusterfs:
         version: 3.4
-        minor_version: "LATEST"

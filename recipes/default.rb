@@ -18,8 +18,9 @@
 #
 
 g = node['glusterfs']
+minor_version = g['version'] == 'LATEST' ? nil : 'LATEST'
 base_url = 'http://download.gluster.org/pub/gluster/glusterfs' \
-           "/#{g['version']}/EPEL.repo/epel-$releasever"
+           "/#{g['version']}/#{minor_version}/EPEL.repo/epel-$releasever"
 
 # Gluster packages to remove if you need an older version
 gluster_remove_pkgs = %w(
@@ -68,7 +69,7 @@ end
 # If the version is specified, make sure we install that version and not
 # something newer.
 unless g['version'] == 'LATEST'
-  gluster_pkgs.each do |p|
+  gluster_remove_pkgs.each do |p|
     # XXX: this is a minor hack. We need a way to bump the version by one point
     # to do this correctly.
     package "#{p} >= #{g['version']}.9999" do
