@@ -1,3 +1,6 @@
-source "https://supermarket.getchef.com"
+source 'https://supermarket.chef.io'
+
+cookbook 'yum'
+cookbook 'yum-centos'
 
 metadata

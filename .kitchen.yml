@@ -11,4 +11,10 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[glusterfs::default]
+  - name: version
+    run_list:
+      - recipe[glusterfs::default]
     attributes:
+      glusterfs:
+        version: 3.4

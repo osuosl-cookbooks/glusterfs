@@ -1,0 +1,1 @@
+default['glusterfs']['version'] = 'LATEST'
