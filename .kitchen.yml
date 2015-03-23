@@ -18,3 +18,6 @@ suites:
     attributes:
       glusterfs:
         version: 3.4
+  - name: server
+    run_list:
+      - recipe[glusterfs::server]
