@@ -8,3 +8,5 @@ version          '0.1.1'
 
 depends          'yum'
 depends          'yum-centos'
+
+supports         'centos', '~> 6'

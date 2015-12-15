@@ -1,12 +1,6 @@
 ---
-driver:
-  name: vagrant
-
 provisioner:
   name: chef_solo
-
-platforms:
-  - name: centos-6.6
 
 suites:
   - name: default
